@@ -8,8 +8,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@types/faker": "^5.5.8",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
+    "faker": "^5.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
