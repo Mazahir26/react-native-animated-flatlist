@@ -26,25 +26,21 @@ export default function List({ data }: { data: Data[] }) {
         data={data}
         keyExtractor={(item) => item.key}
         renderItem={({ item, index }) => {
-          // Wave FlatList Input
+          //Normal Animation
           const inputRange = [
-            (height * 0.1 + 15) * (index - 9),
-            (height * 0.1 + 15) * (index - 6),
-            (height * 0.1 + 15) * (index - 3),
+            -1,
+            0,
             (height * 0.1 + 15) * index,
             (height * 0.1 + 15) * (index + 3),
           ];
-          const scale = scrollY.interpolate({
-            inputRange,
-            outputRange: [0, 0.1, 1, 0.1, 0],
-          });
+          const scale = 1;
           const opacity = scrollY.interpolate({
             inputRange,
-            outputRange: [0, 0.01, 1, 0.01, 0],
+            outputRange: [1, 1, 1, 0],
           });
           const Offset = scrollY.interpolate({
             inputRange,
-            outputRange: [500, 400, 0, -400, -500],
+            outputRange: [0, 0, 0, 500],
           });
 
           return (
@@ -94,7 +90,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// Wave FlatList Input
+// Wave FlatList
 // const inputRange = [
 //   (height * 0.1 + 15) * (index - 9),
 //   (height * 0.1 + 15) * (index - 6),
