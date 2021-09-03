@@ -1,14 +1,8 @@
 import * as React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Animated,
-  Dimensions,
-} from "react-native";
+import { Text, View, StyleSheet, Animated, Dimensions } from "react-native";
 import { Avatar, Surface } from "react-native-paper";
 
-const { height, width } = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 
 interface Data {
   name: string;
@@ -18,12 +12,13 @@ interface Data {
   avatar: string;
 }
 
-export default function List({ data } : {data: Data[]}) {
+export default function List({ data }: { data: Data[] }) {
   const scrollY = React.useRef(new Animated.Value(0)).current;
-
   return (
     <View style={styles.container}>
       <Animated.FlatList
+        // snapToInterval={height * 0.1 + 15}
+        // decelerationRate={0.8}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: true }
@@ -31,18 +26,34 @@ export default function List({ data } : {data: Data[]}) {
         data={data}
         keyExtractor={(item) => item.key}
         renderItem={({ item, index }) => {
+          // Wave FlatList Input
           const inputRange = [
-            -1,
-            0,
-            height * 0.1 * index,
-            height * 0.1 * (index + 2),
+            (height * 0.1 + 15) * (index - 9),
+            (height * 0.1 + 15) * (index - 6),
+            (height * 0.1 + 15) * (index - 3),
+            (height * 0.1 + 15) * index,
+            (height * 0.1 + 15) * (index + 3),
           ];
           const scale = scrollY.interpolate({
             inputRange,
-            outputRange: [1, 1, 1, 0],
+            outputRange: [0, 0.1, 1, 0.1, 0],
           });
+          const opacity = scrollY.interpolate({
+            inputRange,
+            outputRange: [0, 0.01, 1, 0.01, 0],
+          });
+          const Offset = scrollY.interpolate({
+            inputRange,
+            outputRange: [500, 400, 0, -400, -500],
+          });
+
           return (
-            <Animated.View style={{ transform: [{ scale: scale }] }}>
+            <Animated.View
+              style={{
+                transform: [{ scale: scale }, { translateX: Offset }],
+                opacity: opacity,
+              }}
+            >
               <Surface style={styles.surface}>
                 <View style={{ flex: 0.3, justifyContent: "center" }}>
                   <Avatar.Image size={42} source={{ uri: item.avatar }} />
@@ -77,9 +88,46 @@ const styles = StyleSheet.create({
     height: height * 0.1,
     marginTop: 15,
     padding: 8,
-    elevation: 4,
     marginHorizontal: 10,
     borderRadius: 8,
     flexDirection: "row",
   },
 });
+
+// Wave FlatList Input
+// const inputRange = [
+//   (height * 0.1 + 15) * (index - 9),
+//   (height * 0.1 + 15) * (index - 6),
+//   (height * 0.1 + 15) * (index - 3),
+//   (height * 0.1 + 15) * index,
+//   (height * 0.1 + 15) * (index + 3),
+// ];
+// const scale = scrollY.interpolate({
+//   inputRange,
+//   outputRange: [0, 0.1, 1, 0.1, 0],
+// });
+// const opacity = scrollY.interpolate({
+//   inputRange,
+//   outputRange: [0, 0.1, 1, 0.1, 0],
+// });
+// const Offset = scrollY.interpolate({
+//   inputRange,
+//   outputRange: [400, 300, 0, -300, -400],
+// });
+
+//Normal Animation
+// const inputRange = [
+//   -1,
+//   0,
+//   (height * 0.1 + 15) * index,
+//   (height * 0.1 + 15) * (index + 3),
+// ];
+// const scale = 1;
+// const opacity = scrollY.interpolate({
+//   inputRange,
+//   outputRange: [1, 1, 1, 0],
+// });
+// const Offset = scrollY.interpolate({
+//   inputRange,
+//   outputRange: [0, 0, 0, 500],
+// });
