@@ -17,8 +17,6 @@ export default function List({ data }: { data: Data[] }) {
   return (
     <View style={styles.container}>
       <Animated.FlatList
-        // snapToInterval={height * 0.1 + 15}
-        // decelerationRate={0.8}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: true }
